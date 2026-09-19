@@ -10,8 +10,8 @@ const query = `
 `;
 
 const mutation = `
-  mutation SaveAddress($username: String!, $address: AddressInput!) {
-    saveAddress(username: $username, address: $address) {
+  mutation createAddress($username: String!, $address: AddressInput!) {
+    createAddress(username: $username, address: $address) {
       street
     }
   }

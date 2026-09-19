@@ -1,18 +1,26 @@
 import fs from 'fs';
 import path from 'path';
-import { Addresses, Address, Args, SaveAddressArgs } from './types';
+import { Addresses, Address, Args, CreateAddressArgs } from './types';
 import { GraphQLError } from 'graphql';
 
 const filePath = path.join(__dirname, '../../../data/addresses.json');
 
-const readAddresses = (): Addresses => {
-  const raw = fs.readFileSync(filePath, 'utf-8');
+const readAddresses = async (): Promise<Addresses> => {
+  const raw = await fs.promises.readFile(filePath, 'utf-8');
   return JSON.parse(raw) as Addresses;
 };
 
-export const getAddress = (_: any, args: Args, context: any): Address => {
+const writeAddresses = async (addresses: Addresses): Promise<void> => {
+  await fs.promises.writeFile(
+    filePath,
+    JSON.stringify(addresses, null, 2),
+    'utf-8',
+  );
+};
+
+export const getAddress = async (_: any, args: Args, context: any): Promise<Address> => {
   context.logger.info('getAddress', { message: 'Enter resolver' });
-  const addresses = readAddresses();
+  const addresses = await readAddresses();
   const address = addresses[args.username];
   if (address) {
     context.logger.info('getAddress', { message: 'Returning address' });
@@ -22,15 +30,15 @@ export const getAddress = (_: any, args: Args, context: any): Address => {
   throw new GraphQLError('No address found in getAddress resolver');
 };
 
-export const saveAddress = (_: any, args: SaveAddressArgs, context: any): Address => {
-  context.logger.info('saveAddress', { message: 'Enter resolver' });
-  const addresses = readAddresses();
+export const createAddress = async (_: any, args: CreateAddressArgs, context: any): Promise<Address> => {
+  context.logger.info('createAddress', { message: 'Enter resolver' });
+  const addresses = await readAddresses();
   if (addresses[args.username]) {
-    context.logger.error('saveAddress', { message: 'Address already exists' });
+    context.logger.error('createAddress', { message: 'Address already exists' });
     throw new GraphQLError('Address already exists for this username');
   }
   addresses[args.username] = args.address;
-  fs.writeFileSync(filePath, JSON.stringify(addresses, null, 2));
-  context.logger.info('saveAddress', { message: 'Address saved' });
+  await writeAddresses(addresses);
+  context.logger.info('createAddress', { message: 'Address created' });
   return args.address;
 };
