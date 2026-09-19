@@ -16,11 +16,11 @@ afterAll(() => {
   fs.writeFileSync(filePath, originalData);
 });
 
-describe('saveAddress', () => {
+describe('createAddress', () => {
   test('Success', async () => {
     const mutation = `
-      mutation SaveAddress($username: String!, $address: AddressInput!) {
-        saveAddress(username: $username, address: $address) {
+      mutation CreateAddress($username: String!, $address: AddressInput!) {
+        createAddress(username: $username, address: $address) {
           street
           city
           zipcode
@@ -48,7 +48,7 @@ describe('saveAddress', () => {
     expect(result).toEqual(
       expect.objectContaining({
         data: {
-          saveAddress: {
+          createAddress: {
             street: '789 New St.',
             city: 'Newtown',
             zipcode: '12345',
@@ -61,8 +61,8 @@ describe('saveAddress', () => {
 
   test('Error on duplicate username', async () => {
     const mutation = `
-      mutation SaveAddress($username: String!, $address: AddressInput!) {
-        saveAddress(username: $username, address: $address) {
+      mutation CreateAddress($username: String!, $address: AddressInput!) {
+        createAddress(username: $username, address: $address) {
           street
         }
       }
