@@ -3,5 +3,5 @@ type Query {
 }
 
 type Mutation {
-  saveAddress(username: String!, address: AddressInput!): Address
+  createAddress(username: String!, address: AddressInput!): Address
 }

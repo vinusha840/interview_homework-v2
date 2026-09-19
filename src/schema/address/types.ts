@@ -13,7 +13,7 @@ export type Args = {
   username: string;
 };
 
-export type SaveAddressArgs = {
+export type CreateAddressArgs = {
   username: string;
   address: Address;
 };
