@@ -1,0 +1,14 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "type": "object",
+  "properties": {
+    "element_count": {
+      "type": "integer"
+    },
+    "near_earth_objects": {
+      "type": "object",
+      "additionalProperties": true
+    }
+  },
+  "required": ["element_count", "near_earth_objects"]
+}

@@ -1,0 +1,21 @@
+sources:
+  - name: nasa-neo-feed
+    handler:
+      jsonSchema:
+        endpoint: https://api.nasa.gov
+        queryParams:
+          api_key: QMqs6OCzWMQCGx25EKIl5Rqc21wyCSpWyzLlAcNA
+          start_date: '{args.startDate}'
+          end_date: '{args.endDate}'
+        operations:
+          - field: nearEarthObjects
+            type: Query
+            method: GET
+            path: /neo/rest/v1/feed
+            responseSchema: ./data/nasa-neo.schema.json
+            responseTypeName: NearEarthObjectFeed
+            argTypeMap:
+              startDate:
+                type: string
+              endDate:
+                type: string
